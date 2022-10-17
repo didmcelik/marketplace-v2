@@ -1,0 +1,7 @@
+export const SortTypes = {
+  NONE: "NONE",
+  PRICE_LOW_TO_HIGH: "PRICE_LOW_TO_HIGH",
+  PRICE_HIGH_TO_LOW: "PRICE_HIGH_TO_LOW",
+  NEW_TO_OLD: "NEW_TO_OLD",
+  OLD_TO_NEW: "OLD_TO_NEW",
+};

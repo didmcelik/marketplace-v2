@@ -1,3 +1,3 @@
-# Getting Started with Create React App
+# Simple Product Listing React App
 
-Use to run : npm run dev
+Run with : npm run dev

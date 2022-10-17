@@ -14,18 +14,17 @@ function Basket() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const basket = useSelector((state) => state.basketProducts.products);
-  const prodsAndCounts = basket.reduce(function(sums, entry) {
+  const prodsAndCounts = basket.reduce(function (sums, entry) {
+    // counts of items
     sums[entry.slug] = (sums[entry.slug] || 0) + 1;
     return sums;
   }, {});
 
-  useEffect(() => {
-    console.log("prodsAndCounts", prodsAndCounts);
-  }, [basket]);
+  useEffect(() => {}, [basket]); // re-render when basket changed
 
   const calculateTotal = () => {
+    // calculate price based on the prices and and the counts
     let total = 0;
-
     for (const slug of Object.keys(prodsAndCounts)) {
       const items = basket.filter((word) => word.slug === slug);
       const { price } = items[0];
@@ -33,20 +32,16 @@ function Basket() {
     }
     dispatch(setBasketTotal(parseFloat(total).toFixed(2)));
     return parseFloat(total).toFixed(2);
-    // Object.keys(prodsAndCounts).map((slug)=>{
-
-    // })
   };
 
   const basketItems = Object.keys(prodsAndCounts).map((slug) => {
+    // map over items in the basket and render with counts
     const count = prodsAndCounts[slug];
-    console.log("slug", slug);
     const items = basket.filter((word) => word.slug === slug);
     const { name, price } = items[0];
 
     return (
       <Grid
-        //fullwidth
         item
         container
         sx={{ height: 40.88, my: 2 }}
@@ -131,9 +126,6 @@ function Basket() {
         sx={{
           height: 51.1,
           backgroundColor: "#FFFFFF",
-          // borderColor: "#1EA4CE",
-          // border: 2,
-          // borderRadius: 2,
           marinTop: 3,
         }}
         container

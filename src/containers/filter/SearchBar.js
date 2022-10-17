@@ -18,21 +18,28 @@ const useStyles = makeStyles({
 });
 
 const SearchBar = ({ searchBy }) => {
-  //const { REACT_APP_BASE_URL } = process.env;
+  // searchBy: "tag" ||  "brand"
+
+  /*
+  I was using the json api to fetch the data, had to change it for the deployment.
+
+  const { REACT_APP_BASE_URL } = process.env;
+  const [{ data, loading, error }, refetch] = useAxios(
+    `${REACT_APP_BASE_URL}:3000/items`
+  );*/
 
   const classes = useStyles();
   const dispatch = useDispatch();
-  const brandsFiltered = useSelector((state) => state.brandsFilter.brands);
-  const tagsFiltered = useSelector((state) => state.tagsFilter.tags);
+  const brandsList = useSelector((state) => state.brandsFilter.brands);
+  const tagsList = useSelector((state) => state.tagsFilter.tags);
 
-  // const [{ data, loading, error }, refetch] = useAxios(
-  //   `${REACT_APP_BASE_URL}:3000/items`
-  // );
+  /*
 
+  Since I could not use json api for deployment, I read it from the file and memoize it.
+  */
   const data = db["items"];
   const itemsMemoized = useMemo(() => {
     const items = [];
-    //if (!loading) {
     for (const da of data) {
       if (searchBy === "brand") {
         items.push(da.manufacturer);
@@ -41,9 +48,7 @@ const SearchBar = ({ searchBy }) => {
       }
     }
     dispatch(setProducts(data.sort((a, b) => b.price - a.price)));
-    // }
-
-    return [...new Set(items)]; //JSON.stringify(data || {});
+    return [...new Set(items)];
   }, [data]);
 
   useEffect(() => {
@@ -56,9 +61,8 @@ const SearchBar = ({ searchBy }) => {
       dispatch(setTagFilter(itemsMemoized));
     }
   }, [itemsMemoized]);
-  console.log("brandsFiltered", brandsFiltered);
-  console.log("tagsFiltered", tagsFiltered);
-  useEffect(() => {}, [searchBy === "brand" ? brandsFiltered : tagsFiltered]);
+
+  useEffect(() => {}, [searchBy === "brand" ? brandsList : tagsList]);
   return (
     <>
       <input

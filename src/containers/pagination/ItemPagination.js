@@ -14,6 +14,7 @@ const ItemPagination = () => {
   const filteredData = useSelector((state) => state.filteredProducts.products);
 
   useEffect(() => {
+    //Client-side pagination. Change last page index if data filtered. Re-render if data filtered.
     dispatch(
       setCurrentLastPageIndex(
         Math.ceil(filteredData.length / 16) != 0

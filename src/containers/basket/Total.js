@@ -3,9 +3,8 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function Total() {
-  const dispatch = useDispatch();
   const total = useSelector((state) => state.basketTotal);
-  useEffect(() => {}, [total]);
+  useEffect(() => {}, [total]); //re-render if total changes
   return (
     <Box
       width={129}

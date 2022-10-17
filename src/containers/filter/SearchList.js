@@ -13,20 +13,20 @@ import {
   isAllTagsSelected,
 } from "../../redux/actions/tagActions";
 
-//is all selected için ayrı bir state tut
+// Filter options depending on the search type tags or brand
 const SearchList = ({ searchBy }) => {
   const dispatch = useDispatch();
   const brandsFilter = useSelector((state) => state.brandsFilter.brands);
   const tagsFilter = useSelector((state) => state.tagsFilter.tags);
-  const options = searchBy === "brand" ? brandsFilter : tagsFilter;
+  const options = searchBy === "brand" ? brandsFilter : tagsFilter; //filter options depending on search filter
 
   const selectedBrands = useSelector((state) => state.selectedBrands.brands);
   const selectedTags = useSelector((state) => state.selectedTags.tags);
-  const selectedItems = searchBy === "brand" ? selectedBrands : selectedTags;
+  const selectedItems = searchBy === "brand" ? selectedBrands : selectedTags; //selected filter options
 
   const allBrands = useSelector((state) => state.allBrands.brands);
   const allTags = useSelector((state) => state.allTags.tags);
-  const allItems = searchBy === "brand" ? allBrands : allTags;
+  const allItems = searchBy === "brand" ? allBrands : allTags; //  all filter options (needed to change current selected filters if "all" clicked)
 
   const isAllBrandsFilterSelected = useSelector(
     (state) => state.isAllBrandsSelected
@@ -43,38 +43,37 @@ const SearchList = ({ searchBy }) => {
     if (isAllSelected) {
       //select item
       searchBy === "brand"
-        ? dispatch(setSelectedBrands(allItems))
+        ? dispatch(setSelectedBrands(allItems)) // select all brands filter options if "all" clicked
         : dispatch(setSelectedTags(allItems));
     } else {
       //deselect item
       searchBy === "brand"
-        ? dispatch(setSelectedBrands([]))
+        ? dispatch(setSelectedBrands([])) // deselect all brands filter options if "all" clicked
         : dispatch(setSelectedTags([]));
     }
-
-    console.log("isAllSelectedisAllSelected", isAllSelected);
-  }, [isAllSelected]); //TODO
+  }, [isAllSelected]); //Re-render if "select all" value changes.
 
   const handleChange = (event, selectedItem) => {
     if (event.target.checked) {
       //select item
       searchBy === "brand"
-        ? dispatch(setSelectedBrands([...selectedItems, selectedItem]))
+        ? dispatch(setSelectedBrands([...selectedItems, selectedItem])) // add to selected filter options
         : dispatch(setSelectedTags([...selectedItems, selectedItem]));
     } else {
       //deselect item
       searchBy === "brand"
         ? dispatch(
             setSelectedBrands(
-              selectedItems.filter(function(item) {
+              selectedItems.filter(function (item) {
+                //delete from selected filter options
                 return item !== selectedItem;
               })
             )
           )
-        : // : dispatch(setSelectedBrands([...selectedItems, selectedItem]));
-          dispatch(
+        : dispatch(
             setSelectedTags(
-              selectedItems.filter(function(item) {
+              selectedItems.filter(function (item) {
+                //delete from selected filter options
                 return item !== selectedItem;
               })
             )
@@ -83,12 +82,14 @@ const SearchList = ({ searchBy }) => {
   };
 
   const handleChangeAll = (event) => {
+    //handle if "All" select clicked
     searchBy === "brand"
       ? dispatch(isAllBrandsSelected(event.target.checked))
       : dispatch(isAllTagsSelected(event.target.checked));
   };
 
   const renderList = options.map((item) => {
+    // render filter options by current filter value
     return (
       <Grid container direction="row" key={item}>
         <Checkbox
@@ -132,23 +133,3 @@ const SearchList = ({ searchBy }) => {
 };
 
 export default SearchList;
-
-{
-  /* <input
-            type="checkbox"
-            sx={{ color: "#1EA4CE", height: "22px", width: "22px" }}
-            onClick={handleChangeAll}
-          /> */
-}
-
-{
-  /* <input
-          type="checkbox"
-          style={{ backgroundColor: "#1EA4CE" }}
-          onClick={(e) => {
-            handleChange(e, item);
-          }}
-          checked={selectedItems.indexOf(item) != -1}
-          disabled={isAllSelected}
-        /> */
-}
